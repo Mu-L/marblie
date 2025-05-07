@@ -5,7 +5,10 @@ export default defineConfig({
   server: {
     host: "0.0.0.0",
   },
+  build: {
+    target: "es2022", // this affects Rollup build
+  },
   esbuild: {
-    target: "ES2022", // or 'esnext'
+    target: "es2022", // or 'esnext'
   },
 });
