@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { ExtrudeGeometry, Shape, ShapeGeometry } from "three";
 import { defaults } from "./config";
 

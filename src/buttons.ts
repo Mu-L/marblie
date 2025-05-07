@@ -8,7 +8,6 @@ import {
   toggleDay,
   toggleFollowMarble,
   toggleAutoMarble,
-  addLightCube,
   addTubeTrack,
 } from "./Marblie.ts";
 
@@ -33,26 +32,24 @@ document
 // Track button handlers
 
 let isMouseDownOnTrack = false;
-let startTouchX = 0;
-let startTouchY = 0;
+
 let buttonRect: any;
 let createdTrack = false;
 
 document.querySelectorAll(".trackButton").forEach((button) => {
   if (isTouchDevice) {
     // touch start
-    button.addEventListener("touchstart", (event) => {
-      console.log("touchstart");
+    button.addEventListener("touchstart", () => {
       isMouseDownOnTrack = true;
-      startTouchX = event.touches[0].clientX;
-      startTouchY = event.touches[0].clientY;
+
       buttonRect = button.getBoundingClientRect();
     });
 
     // touch move
     button.addEventListener("touchmove", (event) => {
-      console.log("touchmove");
-      if (event.touches[0].clientY < buttonRect.top && !createdTrack) {
+      const touchEvent = event as TouchEvent;
+
+      if (touchEvent.touches[0].clientY < buttonRect.top && !createdTrack) {
         createdTrack = true;
         addEventHandler(button);
       }
@@ -72,7 +69,7 @@ document.querySelectorAll(".trackButton").forEach((button) => {
 });
 
 const addEventHandler = (button: Element) => {
-  const action = button.dataset.action;
+  const action = (button as HTMLElement).dataset.action;
   switch (action) {
     case "straight":
       addStraightTrack();

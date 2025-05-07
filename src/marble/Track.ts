@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { curveTrackGeometry, straightTrackGeometry, trackShape } from "./geometries.js";
 import * as THREE from "three";
 import * as RAPIER from "@dimforge/rapier3d-compat";

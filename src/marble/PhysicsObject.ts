@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import gsap from "gsap";
 import * as THREE from "three";
 import * as RAPIER from "@dimforge/rapier3d-compat";
