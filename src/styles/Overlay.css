@@ -1,0 +1,382 @@
+.about {
+  width: 100%;
+  height: 100vh;
+
+  overflow-y: scroll;
+
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%) translateY(0);
+
+  z-index: 3;
+
+  transition: 0.4s;
+  visibility: visible;
+  opacity: 1;
+}
+
+.aboutHide {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(-50%) translateY(3rem);
+}
+
+.aboutWrapper {
+  position: relative;
+  --padding-inline: 5rem;
+
+  width: calc(90% - (2 * var(--padding-inline)));
+  max-width: 60rem;
+
+  min-height: 100vh;
+  margin-inline: auto;
+  border-radius: 2rem 2rem 0 0;
+
+  background-color: #eee;
+
+  pointer-events: all;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  margin-top: 3rem;
+
+  padding-inline: var(--padding-inline);
+
+  box-shadow: 5px 5px 10px 5px #00000033;
+}
+
+.about::-webkit-scrollbar {
+  display: none;
+}
+.about {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.aboutCloseButton {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+
+  width: 2rem;
+  height: 2rem;
+
+  border-radius: 50%;
+
+  background-color: #00000033;
+
+  cursor: pointer;
+}
+
+.about h1 {
+  text-align: center;
+
+  font-family: "Jua";
+  font-weight: 900;
+  font-size: 3rem;
+
+  max-width: 40rem;
+
+  margin-top: 5rem;
+  margin-bottom: 3rem;
+}
+
+.aboutTextWrapper {
+  display: grid;
+  grid-template-columns: 50% 50%;
+  margin-block: 2rem;
+}
+
+.about h2 {
+  font-family: "Inria Sans";
+  font-weight: 900;
+  font-size: 1.5rem;
+}
+
+.about p {
+  font-family: "Inria Sans";
+  font-size: 1.3rem;
+  line-height: 150%;
+  padding-left: 5rem;
+}
+
+@media (width <= 50rem) {
+  .aboutWrapper {
+    --padding-inline: 2rem;
+    margin-top: 8rem;
+  }
+
+  .aboutTextWrapper {
+    display: block;
+  }
+  .about p {
+    padding-left: 0;
+  }
+}
+
+/* ----- Overlay ----- */
+.overlay {
+  /* display: none; */
+  width: 100dvw;
+  height: 100dvh;
+
+  pointer-events: none;
+}
+
+.hide {
+  display: none;
+}
+
+.overlayHeader {
+  display: flex;
+  justify-content: right;
+}
+
+.overlaySpacer {
+}
+
+.aboutButton {
+  width: 3rem;
+  height: 3rem;
+
+  margin: 1rem 1rem 0 0;
+
+  border-radius: 50%;
+
+  background-color: #ffffffaa;
+  transition: 0.3s;
+
+  pointer-events: all;
+
+  box-shadow: var(--box-shadow);
+}
+
+.aboutButton:hover {
+  background-color: #fff;
+}
+
+.aboutButton > img {
+  width: 100%;
+  height: 100%;
+}
+
+/* ----- Sidebar ----- */
+.overlaySidebar {
+  position: absolute;
+
+  right: 0;
+  top: 40%;
+
+  border-radius: 1rem 0 0 1rem;
+  height: fit-content;
+  padding: 1rem 0.7rem;
+
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+
+  background-color: rgba(255, 255, 255, 0.4);
+
+  box-shadow: var(--box-shadow);
+}
+
+@media (width <= 50rem) {
+  .overlaySidebar {
+    top: 13%;
+  }
+}
+
+.toggleButton {
+  width: 3rem;
+  height: 3rem;
+
+  border-radius: 50%;
+
+  background-color: #ffffff88;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  pointer-events: all;
+
+  transition: 0.3s;
+}
+
+.toggleButton:hover {
+  background-color: white;
+}
+
+.toggleButton > img {
+  width: 100%;
+  height: 100%;
+
+  transition: 0.3s;
+}
+
+.toggleOn > img {
+  filter: brightness(3);
+}
+
+#dayButton.toggleOn {
+  background-color: #f9d464;
+}
+
+#dayButton.toggleOn:hover {
+  background-color: #f4c741;
+}
+
+.toggleOn#autoMarbleButton,
+.toggleOn#followMarbleButton {
+  background-color: #a0d3ff;
+}
+
+.toggleOn#autoMarbleButton:hover,
+.toggleOn#followMarbleButton:hover {
+  background-color: #63b3f8;
+}
+
+/* ----- Track Bar ----- */
+
+.overlayTrackBar {
+  position: absolute;
+  bottom: -2rem;
+  left: 50%;
+
+  /* max-width: 100%; */
+  width: 100%;
+  height: 8rem;
+
+  transform: translateX(-50%);
+
+  /* display: inline; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+
+  overflow-y: scroll;
+
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+
+  z-index: 2;
+
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
+}
+@media (width <= 50rem) {
+  .overlayTrackBar {
+    justify-content: left;
+  }
+}
+
+.overlayTrackBar::-webkit-scrollbar {
+  display: none;
+}
+
+.trackButton:nth-child(1) {
+  margin-left: 1rem;
+}
+.trackButton:nth-last-child(1) {
+  margin-right: 1rem;
+}
+
+.trashButton {
+  position: absolute;
+
+  --size: calc(4.5rem - 10px);
+
+  left: 50%;
+  transform: translateX(-50%);
+
+  bottom: -6rem;
+
+  width: calc(4.5rem - 10px);
+  height: calc(4.5rem - 10px);
+
+  border-radius: 1rem;
+  border: 5px solid rgba(255, 255, 255, 0.5);
+
+  /* background-color: rgba(255, 255, 255, 0.5); */
+
+  pointer-events: all;
+  box-shadow: var(--box-shadow);
+}
+
+.trashButtonHover {
+  border-color: #f00;
+}
+
+.trashButtonXHover {
+  background-color: #f00;
+}
+
+#x1,
+#x2 {
+  position: absolute;
+  top: 50%;
+  left: -39%;
+  transform: translate(50%, -50%);
+  width: 55px;
+  height: 6px;
+  border-radius: 3px;
+
+  background-color: #eee;
+}
+
+#x1 {
+  transform: translate(50%, -50%) rotate(45deg);
+}
+#x2 {
+  transform: translate(50%, -50%) rotate(-45deg);
+}
+
+/* ----- Marble Button ----- */
+.marbleButton {
+  position: absolute;
+
+  bottom: 1rem;
+  right: 1rem;
+
+  width: 6rem;
+  height: 6rem;
+
+  border-radius: 50%;
+
+  background-color: rgba(255, 255, 255, 0.5);
+
+  pointer-events: all;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  box-shadow: var(--box-shadow);
+
+  transition: 0.3s;
+}
+
+@media (width <= 50rem) {
+  .marbleButton {
+    width: 5.5rem;
+    height: 5.5rem;
+
+    bottom: 6.5rem;
+  }
+}
+
+.marbleButton:hover {
+  background-color: #ffffff;
+}
+
+#marbleSvg {
+  width: 60%;
+  height: 60%;
+}

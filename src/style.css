@@ -1,0 +1,68 @@
+body {
+  margin: 0;
+  pointer-events: none;
+  overflow-y: hidden;
+
+  --box-shadow: 0 0 10px 5px #00000011;
+}
+
+#three {
+  width: 100vw;
+  height: 100vh;
+
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+
+  pointer-events: all;
+  background-color: #d0cbc4;
+}
+
+.lil-gui {
+  pointer-events: all !important;
+}
+
+.toggleButton,
+img {
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
+}
+
+.iconSvg.night {
+  filter: brightness(2.2);
+}
+.marbleButton.night:hover,
+.aboutButton.night:hover,
+.toggleButton.night:hover {
+  background-color: #ffffff33;
+}
+.aboutButton.night > .iconSvg.night,
+.toggleButton.toggleOn.night > .iconSvg.night {
+  filter: brightness(3);
+}
+
+.overlaySidebar.night {
+  background-color: #00000044;
+}
+.aboutButton.night,
+.toggleButton.night,
+.marbleButton.night,
+.trackButton.night {
+  background-color: #000000dd;
+}
+
+.trackButton.night:hover {
+  background-color: #000000df;
+}
+
+.logo {
+  width: 15rem;
+  margin-top: 1rem;
+}
+
+.portfolioLink {
+  color: black;
+  text-decoration-thickness: 3px;
+}

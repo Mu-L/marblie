@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite + React + TS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Jua&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="./src/style.css" />
+    <link rel="stylesheet" href="./src/styles/Overlay.css" />
+    <link rel="stylesheet" href="./src/styles/TrackButton.css" />
+  </head>
+  <body>
+    <div class="about aboutHide">
+      <div class="aboutWrapper">
+        <div class="aboutCloseButton"></div>
+        <h1 class="aboutHeading">THANK YOU FOR PLAYING MARBLIE!</h1>
+
+        <div class="aboutTextWrapper">
+          <h2>Marblie is a playful physics sandbox.</h2>
+          <p>
+            Whether you're designing elaborate courses, tinkering with gravity, or just
+            watching marbles swirl down a funnel for the hundredth time, this simulator is
+            meant to spark joy and curiosity.
+          </p>
+        </div>
+        <div class="aboutTextWrapper">
+          <h2>
+            Build, test, and watch marbles race through your own custom tracks. It’s a
+            toy, all about creativity.
+          </h2>
+          <p>
+            This project started as a fun experiment — a mix of physics, design, and
+            childhood nostalgia. Now it’s a toy for anyone who loves rolling things down
+            ramps and seeing what happens.
+          </p>
+        </div>
+
+        <h2>
+          Built by Younghoo Nam, powered by Three.js and Rapier. If you liked this
+          project, check out my other projects at
+          <a class="portfolioLink" href="https://younghoonam.com" target="_blank"
+            >my portfolio</a
+          >!
+        </h2>
+        <img
+          class="logo"
+          style="transform: rotate(-3deg); margin-top: 3rem; margin-bottom: 2rem"
+          src="./images/logo.svg"
+          alt="marblie logo"
+        />
+      </div>
+    </div>
+
+    <!-- Overlay UI -->
+    <div class="overlay">
+      <div class="overlayHeader">
+        <div class="aboutButton">
+          <img
+            class="iconSvg"
+            src="./icons/info.svg"
+            alt="about icon image"
+            id="aboutToggle"
+          />
+        </div>
+      </div>
+
+      <div class="overlaySpacer"></div>
+
+      <div class="overlaySidebar">
+        <div id="dayButton" class="toggleButton toggleOn">
+          <img class="iconSvg" id="sunSvg" src="./icons/sun.svg" />
+        </div>
+        <div id="autoMarbleButton" class="toggleButton">
+          <img class="iconSvg" id="timerSvg" src="./icons/timer.svg" />
+        </div>
+        <div id="followMarbleButton" class="toggleButton">
+          <img class="iconSvg" id="cameraSvg" src="./icons/camera.svg" />
+        </div>
+      </div>
+
+      <div class="overlayTrackBar">
+        <div class="trackButton" data-action="straight">
+          <img src="./images/straight-track.png" />
+        </div>
+        <div class="trackButton" data-action="curve">
+          <img src="./images/curve-track.png" />
+        </div>
+        <div class="trackButton" data-action="windmill">
+          <img src="./images/windmill-track.png" />
+        </div>
+        <div class="trackButton" data-action="funnel">
+          <img src="./images/funnel-track.png" />
+        </div>
+        <div class="trackButton" data-action="tube">
+          <img src="./images/tube.png" />
+        </div>
+        <div class="trackButton" data-action="random">
+          <img src="./images/random.png" />
+        </div>
+      </div>
+
+      <div class="marbleButton">
+        <img id="marbleSvg" class="iconSvg" src="./icons/marble.svg" />
+      </div>
+
+      <div class="trashButton" id="trashButton">
+        <div id="x1"></div>
+        <div id="x2"></div>
+      </div>
+    </div>
+
+    <div id="three"></div>
+    <script type="module" src="./src/buttons.ts"></script>
+    <script type="module" src="/src/Marblie.ts"></script>
+  </body>
+</html>
