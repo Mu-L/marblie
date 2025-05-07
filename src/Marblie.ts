@@ -12,6 +12,7 @@ import {
   DepthOfFieldEffect,
   EffectComposer,
   EffectPass,
+  FXAAEffect,
   RenderPass,
   SMAAEffect,
 } from "postprocessing";
@@ -614,6 +615,8 @@ const gui = new GUI().hide();
 gui.add(rapierDebugRenderer, "enabled");
 gui.add(guiParams, "log");
 gui.add(guiParams, "logTracks");
+
+console.log(dofEffect);
 
 window.addEventListener("keydown", (event) => {
   const key = event.code;
