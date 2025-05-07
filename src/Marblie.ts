@@ -12,7 +12,6 @@ import {
   DepthOfFieldEffect,
   EffectComposer,
   EffectPass,
-  FXAAEffect,
   RenderPass,
   SMAAEffect,
 } from "postprocessing";
