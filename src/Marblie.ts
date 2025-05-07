@@ -616,8 +616,6 @@ gui.add(rapierDebugRenderer, "enabled");
 gui.add(guiParams, "log");
 gui.add(guiParams, "logTracks");
 
-console.log(dofEffect);
-
 window.addEventListener("keydown", (event) => {
   const key = event.code;
 
