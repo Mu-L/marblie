@@ -100,6 +100,27 @@ const eventQueue = new RAPIER.EventQueue(true);
 const gravity = new RAPIER.Vector3(0, -9.81 * 10, 0);
 const world = new RAPIER.World(gravity);
 
+const FIXED_TIME_STEP = 1 / 240;
+const MAX_SUBSTEPS = 4;
+
+// const FIXED_TIME_STEP = 1 / 60;
+// const MAX_SUBSTEPS = 1;
+
+world.timestep = FIXED_TIME_STEP;
+
+let accumulator = 0;
+
+function rapierStep(deltaTime: number) {
+  accumulator += deltaTime;
+
+  let substeps = 0;
+  while (accumulator >= FIXED_TIME_STEP && substeps < MAX_SUBSTEPS) {
+    world.step(); // step Rapier world once
+    accumulator -= FIXED_TIME_STEP;
+    substeps++;
+  }
+}
+
 sceneSetup();
 setupLights();
 
@@ -172,7 +193,8 @@ const rapierDebugRenderer = new RapierDebugRenderer(scene, world);
 function animate() {
   requestAnimationFrame(animate);
 
-  world.step(eventQueue);
+  rapierStep(clock.getDelta());
+  // world.step(eventQueue);
   for (const marble of marbles) marble.update();
   for (const track of tracks) {
     if (track.type === "WindmillTrack") track.updateRotation();
@@ -186,7 +208,7 @@ function animate() {
   rapierDebugRenderer.update();
   controls.update();
 
-  dofEffect.target.lerp(focusPoint, 0.05);
+  dofEffect.target.lerp(focusPoint, 0.1);
 
   // renderer.render(scene, camera);
   composer.render();
@@ -253,7 +275,7 @@ function sceneSetup() {
   // Depth of Field effect
   dofEffect = new DepthOfFieldEffect(camera, {
     focusDistance: 0.02, // normalized [0,1] distance from camera
-    focalLength: 0.02,
+    focalLength: 0.04,
     bokehScale: 6.0,
   });
 
@@ -316,9 +338,11 @@ function handleMouseMove(event: MouseEvent) {
 }
 
 function handleMouseDown() {
-  intersects = raycaster.intersectObjects(scene.children);
+  attach();
+}
 
-  // if (intersects[0]) console.log(intersects[0].object);
+function attach() {
+  intersects = raycaster.intersectObjects(scene.children);
 
   trackIntersects = intersects.filter(
     (intersect) =>
@@ -330,23 +354,15 @@ function handleMouseDown() {
 
   if (trackIntersects[0] || handleIntersects[0]) controls.enableRotate = false;
 
-  // !isMouseInTrackButton(cursor)
-  // mouse isnt clicking on the create track buttons
-  // to prevent controlling the tracks behind the
-  // track buttons
-  if (trackIntersects[0] && !isMouseInTrackButton(cursor)) {
+  if (
+    trackIntersects[0] && // intersects a track
+    !isMouseInTrackButton(cursor) && // not in track buttons
+    handleIntersects.length === 0 // not editing handle
+  ) {
     trackTransformControls.attach(trackIntersects[0].object.parent as THREE.Group);
   } else if (!trackTransformControls.isDragging) {
     trackTransformControls.detach();
   }
-}
-
-function handleMouseUp() {
-  controls.enableRotate = true;
-}
-
-function handleMouseLeave() {
-  pointer.set(-Infinity, -Infinity);
 }
 
 function handleTouchStart(event: TouchEvent) {
@@ -359,30 +375,7 @@ function handleTouchStart(event: TouchEvent) {
   cursor.y = touch.clientY;
 
   raycaster.setFromCamera(pointer, camera);
-
-  intersects = raycaster.intersectObjects(scene.children);
-
-  // if (intersects[0]) console.log(intersects[0].object);
-
-  trackIntersects = intersects.filter(
-    (intersect) =>
-      intersect.object.userData.isTrack || intersect.object.parent?.userData.isTrack
-  );
-  handleIntersects = intersects.filter(
-    (intersect) => intersect.object.userData.type === "Handle"
-  );
-
-  if (trackIntersects[0] || handleIntersects[0]) controls.enableRotate = false;
-
-  // !isMouseInTrackButton(cursor)
-  // mouse isnt clicking on the create track buttons
-  // to prevent controlling the tracks behind the
-  // track buttons
-  if (trackIntersects[0] && !isMouseInTrackButton(cursor)) {
-    trackTransformControls.attach(trackIntersects[0].object.parent as THREE.Group);
-  } else if (!trackTransformControls.isDragging) {
-    trackTransformControls.detach();
-  }
+  attach();
 }
 
 function handleTouchMove(event: TouchEvent) {
@@ -395,6 +388,14 @@ function handleTouchMove(event: TouchEvent) {
   cursor.y = touch.clientY;
 
   raycaster.setFromCamera(pointer, camera);
+}
+
+function handleMouseUp() {
+  controls.enableRotate = true;
+}
+
+function handleMouseLeave() {
+  pointer.set(-Infinity, -Infinity);
 }
 
 function handleTouchEnd() {

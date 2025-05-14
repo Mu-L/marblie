@@ -1,6 +1,13 @@
+html {
+  /* position: relative; */
+
+  -webkit-user-select: none; /* Safari */
+}
+
 body {
   margin: 0;
   pointer-events: none;
+  position: relative;
   overflow-y: hidden;
 
   --box-shadow: 0 0 10px 5px #00000011;

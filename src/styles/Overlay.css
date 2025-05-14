@@ -119,11 +119,13 @@
 
 /* ----- Overlay ----- */
 .overlay {
+  position: relative;
   /* display: none; */
   width: 100dvw;
   height: 100dvh;
 
   pointer-events: none;
+  overflow-y: hidden;
 }
 
 .hide {

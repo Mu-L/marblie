@@ -549,7 +549,7 @@ export class TrackTransformControls {
 
 class Handle extends THREE.Mesh {
   constructor() {
-    const geometry = new THREE.SphereGeometry(0.5);
+    const geometry = new THREE.SphereGeometry(isTouchDevice ? 0.5 : 1);
     geometry.rotateZ(Math.PI / 2);
     geometry.translate(0.8, 0, 0);
     super(geometry, new THREE.MeshBasicMaterial({ color: 0xffff00 }));
