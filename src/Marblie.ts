@@ -84,14 +84,8 @@ class RapierDebugRenderer {
   update() {
     if (this.enabled) {
       const { vertices, colors } = this.world.debugRender();
-      this.mesh.geometry.setAttribute(
-        "position",
-        new THREE.BufferAttribute(vertices, 3)
-      );
-      this.mesh.geometry.setAttribute(
-        "color",
-        new THREE.BufferAttribute(colors, 4)
-      );
+      this.mesh.geometry.setAttribute("position", new THREE.BufferAttribute(vertices, 3));
+      this.mesh.geometry.setAttribute("color", new THREE.BufferAttribute(colors, 4));
       this.mesh.visible = true;
     } else {
       this.mesh.visible = false;
@@ -157,9 +151,7 @@ function getAvailableMarbleLight() {
 }
 
 // ----- Background Wall -----
-const normalMap = new THREE.TextureLoader().load(
-  "./textures/pegboard-normals.jpg"
-);
+const normalMap = new THREE.TextureLoader().load("./textures/pegboard-normals.jpg");
 normalMap.wrapS = THREE.RepeatWrapping;
 normalMap.wrapT = THREE.RepeatWrapping;
 normalMap.repeat = new THREE.Vector2(5, 10);
@@ -171,35 +163,28 @@ const pegboardMaterial = new THREE.MeshStandardMaterial({
   bumpMap: normalMap,
 });
 
-const wall = new THREE.Mesh(
-  new THREE.PlaneGeometry(100, 200),
-  pegboardMaterial
-);
+const wall = new THREE.Mesh(new THREE.PlaneGeometry(100, 200), pegboardMaterial);
 wall.receiveShadow = true;
 wall.rotateY(Math.PI / 2);
 scene.add(wall);
 
 const wallBody = world.createRigidBody(RAPIER.RigidBodyDesc.fixed());
-const wallColliderDesc = RAPIER.ColliderDesc.cuboid(
-  0.05,
-  500,
-  500
-).setTranslation(-0.05, 0, 0);
+const wallColliderDesc = RAPIER.ColliderDesc.cuboid(0.05, 500, 500).setTranslation(
+  -0.05,
+  0,
+  0
+);
 world.createCollider(wallColliderDesc, wallBody);
 
 // Load GLTF
 await TRACK.preloadTracks();
 
-const tracks = loadTracks(scene, world);
+const tracks = await loadTracks(scene, world);
 
 const starterTrack = tracks.find((track) => track.type === "StarterTrack");
 starterTrack?.placeMarble(marbles, getAvailableMarbleLight());
 
-const trackTransformControls = new TrackTransformControls(
-  camera,
-  scene,
-  tracks
-);
+const trackTransformControls = new TrackTransformControls(camera, scene, tracks);
 
 const rapierDebugRenderer = new RapierDebugRenderer(scene, world);
 
@@ -359,8 +344,7 @@ function attach() {
 
   trackIntersects = intersects.filter(
     (intersect) =>
-      intersect.object.userData.isTrack ||
-      intersect.object.parent?.userData.isTrack
+      intersect.object.userData.isTrack || intersect.object.parent?.userData.isTrack
   );
   handleIntersects = intersects.filter(
     (intersect) => intersect.object.userData.type === "Handle"
@@ -373,9 +357,7 @@ function attach() {
     !isMouseInTrackButton(cursor) && // not in track buttons
     handleIntersects.length === 0 // not editing handle
   ) {
-    trackTransformControls.attach(
-      trackIntersects[0].object.parent as THREE.Group
-    );
+    trackTransformControls.attach(trackIntersects[0].object.parent as THREE.Group);
   } else if (!trackTransformControls.isDragging) {
     trackTransformControls.detach();
   }
@@ -552,8 +534,7 @@ const toggleDay = () => {
     gsap.to("#three", { backgroundColor: "#161514" });
   } else {
     if (element) element.classList.add("toggleOn");
-    for (const nightElement of nightElements)
-      nightElement.classList.remove("night");
+    for (const nightElement of nightElements) nightElement.classList.remove("night");
 
     // Logo Material changes
     tracks
@@ -686,49 +667,20 @@ function saveTracks(tracks: any[]) {
   });
 
   const json = JSON.stringify(trackData, null, 2);
+  console.log(json);
   localStorage.setItem("trackData", json);
 }
 
-function loadTracks(scene: THREE.Scene, world: RAPIER.World): any[] {
-  const json = localStorage.getItem("trackData");
+async function loadTracks(scene: THREE.Scene, world: RAPIER.World): Promise<any[]> {
+  let json = localStorage.getItem("trackData");
 
+  // If there's no track data in localStorage, fetch the default JSON
   if (!json) {
-    const tracks = [
-      new TRACK.Starter(scene, world).setTranslation(0, 7.51, 6.7).delay(),
-      new TRACK.Straight(scene, world)
-        .setTranslation(0, -1, -4)
-        .addRotation(degToRad(15), 0, 0)
-        .delay(),
-      new TRACK.Straight(scene, world)
-        .setTranslation(0, -7, 5)
-        .addRotation(degToRad(-10), 0, 0)
-        .delay(),
-      new TRACK.Curve(scene, world, {
-        curvePoints: [
-          new THREE.Vector3(0, 0, 3.5),
-          new THREE.Vector3(0, -3, 0),
-          new THREE.Vector3(0, -3, -3.5),
-        ],
-      })
-        .setTranslation(0, 6, 5)
-        .delay(),
-      new TRACK.Windmill(scene, world).setTranslation(0, 0.5, 0).delay(),
-      new TRACK.Funnel(scene, world).setTranslation(0, -3.5, 5).delay(),
-      new TRACK.Tray(scene, world).setTranslation(0, -9, -3).delay(),
-      new TRACK.Logo(scene, world)
-        .setTranslation(0, 9, 1)
-        .setRotation(degToRad(9), 0, 0)
-        .delay(),
-      new TRACK.Ring(scene, world)
-        .setTranslation(0, 0, -5)
-        .setRotation(degToRad(80), 0, 0)
-        .delay(),
-    ];
-    return tracks;
+    const response = await fetch("./trackSetups/trackSetupDefault.json");
+    json = JSON.stringify(await response.json());
   }
 
   const trackData = JSON.parse(json);
-
   const tracks: any[] = [];
 
   for (const data of trackData) {
@@ -782,12 +734,8 @@ function loadTracks(scene: THREE.Scene, world: RAPIER.World): any[] {
 
     if (track) {
       track.id = data.id;
-      // Set position
       track.setTranslation(data.position.x, data.position.y, data.position.z);
-
-      // Set rotation
       track.setRotation(data.rotation.x, data.rotation.y, data.rotation.z);
-
       tracks.push(track);
     }
   }
