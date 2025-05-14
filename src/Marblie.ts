@@ -84,8 +84,14 @@ class RapierDebugRenderer {
   update() {
     if (this.enabled) {
       const { vertices, colors } = this.world.debugRender();
-      this.mesh.geometry.setAttribute("position", new THREE.BufferAttribute(vertices, 3));
-      this.mesh.geometry.setAttribute("color", new THREE.BufferAttribute(colors, 4));
+      this.mesh.geometry.setAttribute(
+        "position",
+        new THREE.BufferAttribute(vertices, 3)
+      );
+      this.mesh.geometry.setAttribute(
+        "color",
+        new THREE.BufferAttribute(colors, 4)
+      );
       this.mesh.visible = true;
     } else {
       this.mesh.visible = false;
@@ -94,8 +100,6 @@ class RapierDebugRenderer {
 }
 
 await RAPIER.init();
-
-const eventQueue = new RAPIER.EventQueue(true);
 
 const gravity = new RAPIER.Vector3(0, -9.81 * 10, 0);
 const world = new RAPIER.World(gravity);
@@ -153,7 +157,9 @@ function getAvailableMarbleLight() {
 }
 
 // ----- Background Wall -----
-const normalMap = new THREE.TextureLoader().load("./textures/pegboard-normals.jpg");
+const normalMap = new THREE.TextureLoader().load(
+  "./textures/pegboard-normals.jpg"
+);
 normalMap.wrapS = THREE.RepeatWrapping;
 normalMap.wrapT = THREE.RepeatWrapping;
 normalMap.repeat = new THREE.Vector2(5, 10);
@@ -165,17 +171,20 @@ const pegboardMaterial = new THREE.MeshStandardMaterial({
   bumpMap: normalMap,
 });
 
-const wall = new THREE.Mesh(new THREE.PlaneGeometry(100, 200), pegboardMaterial);
+const wall = new THREE.Mesh(
+  new THREE.PlaneGeometry(100, 200),
+  pegboardMaterial
+);
 wall.receiveShadow = true;
 wall.rotateY(Math.PI / 2);
 scene.add(wall);
 
 const wallBody = world.createRigidBody(RAPIER.RigidBodyDesc.fixed());
-const wallColliderDesc = RAPIER.ColliderDesc.cuboid(0.05, 500, 500).setTranslation(
-  -0.05,
-  0,
-  0
-);
+const wallColliderDesc = RAPIER.ColliderDesc.cuboid(
+  0.05,
+  500,
+  500
+).setTranslation(-0.05, 0, 0);
 world.createCollider(wallColliderDesc, wallBody);
 
 // Load GLTF
@@ -186,7 +195,11 @@ const tracks = loadTracks(scene, world);
 const starterTrack = tracks.find((track) => track.type === "StarterTrack");
 starterTrack?.placeMarble(marbles, getAvailableMarbleLight());
 
-const trackTransformControls = new TrackTransformControls(camera, scene, tracks);
+const trackTransformControls = new TrackTransformControls(
+  camera,
+  scene,
+  tracks
+);
 
 const rapierDebugRenderer = new RapierDebugRenderer(scene, world);
 
@@ -346,7 +359,8 @@ function attach() {
 
   trackIntersects = intersects.filter(
     (intersect) =>
-      intersect.object.userData.isTrack || intersect.object.parent?.userData.isTrack
+      intersect.object.userData.isTrack ||
+      intersect.object.parent?.userData.isTrack
   );
   handleIntersects = intersects.filter(
     (intersect) => intersect.object.userData.type === "Handle"
@@ -359,7 +373,9 @@ function attach() {
     !isMouseInTrackButton(cursor) && // not in track buttons
     handleIntersects.length === 0 // not editing handle
   ) {
-    trackTransformControls.attach(trackIntersects[0].object.parent as THREE.Group);
+    trackTransformControls.attach(
+      trackIntersects[0].object.parent as THREE.Group
+    );
   } else if (!trackTransformControls.isDragging) {
     trackTransformControls.detach();
   }
@@ -536,7 +552,8 @@ const toggleDay = () => {
     gsap.to("#three", { backgroundColor: "#161514" });
   } else {
     if (element) element.classList.add("toggleOn");
-    for (const nightElement of nightElements) nightElement.classList.remove("night");
+    for (const nightElement of nightElements)
+      nightElement.classList.remove("night");
 
     // Logo Material changes
     tracks

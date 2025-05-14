@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 import gsap from "gsap";
 import * as THREE from "three";
 import * as RAPIER from "@dimforge/rapier3d-compat";
@@ -57,7 +55,9 @@ export class PhysicsObject {
       this.world.removeRigidBody(this.body);
 
       for (const child of this.group.children) {
-        child.material?.dispose();
+        if (child instanceof THREE.Mesh) {
+          child.material?.dispose();
+        }
       }
     };
 
@@ -77,7 +77,7 @@ export class PhysicsObject {
     );
   }
 
-  setRotation(x, y, z) {
+  setRotation(x: any, y: any, z: any) {
     if (x instanceof THREE.Quaternion) {
       this.body.setRotation(x, true);
     } else {
@@ -89,7 +89,7 @@ export class PhysicsObject {
     return this;
   }
 
-  addRotation(x, y, z) {
+  addRotation(x: number, y: number, z: number) {
     const current = new THREE.Quaternion().copy(this.body.rotation());
     const added = new THREE.Quaternion().setFromEuler(new THREE.Euler(x, y, z));
     current.multiply(added);
@@ -98,7 +98,7 @@ export class PhysicsObject {
     return this;
   }
 
-  setTranslation(x, y, z) {
+  setTranslation(x: any, y: any, z: any) {
     if (x instanceof THREE.Vector3) {
       this.body.setTranslation(x, true);
     } else {
@@ -108,7 +108,7 @@ export class PhysicsObject {
     return this;
   }
 
-  addTranslation(x, y, z) {
+  addTranslation(x: number, y: number, z: number) {
     const current = new THREE.Vector3().copy(this.body.translation());
     current.add(new THREE.Vector3(x, y, z));
     this.body.setTranslation(current, true);

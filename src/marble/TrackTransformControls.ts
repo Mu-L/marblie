@@ -115,7 +115,9 @@ export class TrackTransformControls {
 
   move = () => {
     this.raycaster.setFromCamera(this.pointer, this.camera);
-    this.raycastPlanePos.copy(this.raycaster.intersectObject(this.raycastPlane)[0].point);
+    this.raycastPlanePos.copy(
+      this.raycaster.intersectObject(this.raycastPlane)[0].point
+    );
 
     // handle mesh drag
     if (this.selectedMesh?.parent?.userData.isTrack) {
@@ -135,7 +137,10 @@ export class TrackTransformControls {
       if (this.trackType === "CurveTrack") objectToRaycast.clampLength(0.5, 7);
 
       //
-      this.activeHandle.position.addVectors(this.attachedGroup.position, objectToRaycast);
+      this.activeHandle.position.addVectors(
+        this.attachedGroup.position,
+        objectToRaycast
+      );
 
       if (this.trackType === "StraightTrack") {
         this.rotationScaleTransform();
@@ -172,7 +177,9 @@ export class TrackTransformControls {
     this.raycaster.setFromCamera(this.pointer, this.camera);
     const intersects = this.raycaster.intersectObjects(this.scene.children);
 
-    this.raycastPlanePos.copy(this.raycaster.intersectObject(this.raycastPlane)[0].point);
+    this.raycastPlanePos.copy(
+      this.raycaster.intersectObject(this.raycastPlane)[0].point
+    );
 
     // if intersect is Handle, activeHandle
     if (intersects[0]?.object.userData.type === "Handle") {
@@ -280,7 +287,9 @@ export class TrackTransformControls {
           // ----- Windmill Track -----
         } else if (this.attachedTrack.type === "WindmillTrack") {
           this.attachedTrack.updateMeshToBody();
-          this.attachedTrack.bladeBody.setTranslation(this.attachedGroup?.position);
+          this.attachedTrack.bladeBody.setTranslation(
+            this.attachedGroup?.position
+          );
         } else {
           this.attachedTrack.updateMeshToBody();
         }
@@ -323,7 +332,10 @@ export class TrackTransformControls {
     );
 
     // --- Rotation ---
-    const angle = getSignedAngle3D(this.startHandleToObjectPos, newHandlePosToObject);
+    const angle = getSignedAngle3D(
+      this.startHandleToObjectPos,
+      newHandlePosToObject
+    );
     this.attachedGroup.rotation.x = this.startObjectRotation.x + angle;
 
     const handleID = this.activeHandle.userData.id;
@@ -335,7 +347,9 @@ export class TrackTransformControls {
       const startLength = mirroredPos.length();
 
       // Adjust for offset and scaling
-      mirroredPos.multiplyScalar((startLength - this.handleOffset) / startLength);
+      mirroredPos.multiplyScalar(
+        (startLength - this.handleOffset) / startLength
+      );
       mirroredPos.multiplyScalar(this.attachedGroup.scale.z);
 
       // Normalize length and rotate
@@ -357,7 +371,8 @@ export class TrackTransformControls {
     );
 
     // --- Scale ---
-    const startScalar = this.startHandleToObjectPos.length() - this.handleOffset;
+    const startScalar =
+      this.startHandleToObjectPos.length() - this.handleOffset;
     const newScalar = newHandlePosToObject.length() - this.handleOffset;
     const scalar = newScalar / startScalar;
     this.attachedGroup.scale.z = this.startObjectScale.z * scalar;
@@ -473,9 +488,11 @@ export class TrackTransformControls {
 
     boundingSphere.radius *= this.attachedGroup.scale.z;
 
-    const handleOffsetVec = new THREE.Vector3(0, 0, this.handleOffset).applyEuler(
-      this.attachedGroup.rotation
-    );
+    const handleOffsetVec = new THREE.Vector3(
+      0,
+      0,
+      this.handleOffset
+    ).applyEuler(this.attachedGroup.rotation);
     const handlePosR = new THREE.Vector3(0, 0, boundingSphere.radius)
       .applyEuler(this.attachedGroup.rotation)
       .add(this.attachedGroup.position)

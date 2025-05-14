@@ -75,10 +75,13 @@ export class Marble extends PhysicsObject {
   dispose(): void {
     const index = this.marblesArray.indexOf(this);
     this.marblesArray.splice(index, 1);
-    super.dispose();
+
     if (this.light) {
+      this.group.remove(this.light);
       this.light.userData.inUse = false;
     }
+
+    super.dispose();
   }
 
   update(): void {
